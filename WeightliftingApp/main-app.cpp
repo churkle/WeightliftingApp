@@ -24,12 +24,12 @@ void countPlates(vector<plate>& plates, double givenWeight)
 
 void quickSort(vector<plate>& plates, int start, int end)
 {
-	while (end - start > 0)
+	if(end - start > 0)
 	{
 		double pivot = plates[end].weight;
 		int firstLarger = start;
 
-		for (size_t i = start; i < end; i++)
+		for (int i = start; i < end; i++)
 		{
 			if (plates[i].weight <= pivot)
 			{
@@ -51,19 +51,21 @@ int main()
 
 	cout << "Please enter the plate weights you have: ";
 
-	while (cin >> num)
+	while (cin >> num && num != 0)
 	{
 		plate *tmp = new plate;
 		tmp->weight = num;
 		plates.push_back(*tmp);
 	}
 
-	quickSort(plates, 0, plates.size());
+	quickSort(plates, 0, plates.size() - 1);
 
 	for (size_t i = 0; i < plates.size(); i++)
 	{
 		cout << plates[i].weight << " ";
 	}
+
+	cout << endl;
 
 	cout << "Please enter the weight you want to use: ";
 	cin >> weight;

@@ -9,17 +9,55 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <math.h>
 using namespace std;
 
 struct plate
 {
 	double weight;
-	int quantity;
+	int quantity = 0;
 };
 
 void countPlates(vector<plate>& plates, double givenWeight)
 {
+	double weight = givenWeight - 45.0;
 
+	if (weight >= 0)
+	{
+		for (size_t i = plates.size() - 1; i >= 0; i--)
+		{
+			if (fmod(weight, plates[i].weight * 2.0) == 0)
+			{
+				plates[i].quantity = (int) (weight / (plates[i].weight * 2.0));
+				weight = 0.0;
+				break;
+			}
+			else
+			{
+				plates[i].quantity = weight / (plates[i].weight * 2.0);
+				weight = fmod(weight, (plates[i].weight * 2.0));
+			}
+		}
+
+		if (weight == 0.0)
+		{
+			for (int j = plates.size() - 1; j >= 0; j--)
+			{
+				if (plates[j].quantity != 0)
+				{
+					cout << plates[j].weight << ": " << plates[j].quantity << endl;
+				}
+			}
+		}
+		else
+		{
+			cout << "Weight impossible to create with current combination of weights." << endl;
+		}
+	}
+	else
+	{
+		cout << "Weight is less than a bar." << endl;
+	}
 }
 
 void quickSort(vector<plate>& plates, int start, int end)
@@ -60,15 +98,9 @@ int main()
 
 	quickSort(plates, 0, plates.size() - 1);
 
-	for (size_t i = 0; i < plates.size(); i++)
-	{
-		cout << plates[i].weight << " ";
-	}
-
-	cout << endl;
-
 	cout << "Please enter the weight you want to use: ";
 	cin >> weight;
 
 	countPlates(plates, weight);
+	system("pause");
 }

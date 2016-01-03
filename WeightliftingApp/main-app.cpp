@@ -7,100 +7,38 @@
 
 #include <string>
 #include <iostream>
+#include <sstream>
 #include <vector>
-#include <algorithm>
-#include <math.h>
+#include "Plate.h"
+
 using namespace std;
-
-struct plate
-{
-	double weight;
-	int quantity = 0;
-};
-
-void countPlates(vector<plate>& plates, double givenWeight)
-{
-	double weight = givenWeight - 45.0;
-
-	if (weight >= 0)
-	{
-		for (size_t i = plates.size() - 1; i >= 0; i--)
-		{
-			if (fmod(weight, plates[i].weight * 2.0) == 0)
-			{
-				plates[i].quantity = (int) (weight / (plates[i].weight * 2.0));
-				weight = 0.0;
-				break;
-			}
-			else
-			{
-				plates[i].quantity = weight / (plates[i].weight * 2.0);
-				weight = fmod(weight, (plates[i].weight * 2.0));
-			}
-		}
-
-		if (weight == 0.0)
-		{
-			for (int j = plates.size() - 1; j >= 0; j--)
-			{
-				if (plates[j].quantity != 0)
-				{
-					cout << plates[j].weight << ": " << plates[j].quantity << endl;
-				}
-			}
-		}
-		else
-		{
-			cout << "Weight impossible to create with current combination of weights." << endl;
-		}
-	}
-	else
-	{
-		cout << "Weight is less than a bar." << endl;
-	}
-}
-
-void quickSort(vector<plate>& plates, int start, int end)
-{
-	if(end - start > 0)
-	{
-		double pivot = plates[end].weight;
-		int firstLarger = start;
-
-		for (int i = start; i < end; i++)
-		{
-			if (plates[i].weight <= pivot)
-			{
-				std::swap(plates[i], plates[firstLarger]);
-				firstLarger++;
-			}
-		}
-
-		std::swap(plates[end], plates[firstLarger]);
-		quickSort(plates, start, firstLarger - 1);
-		quickSort(plates, firstLarger + 1, end);
-	}
-}
 
 int main()
 {
-	vector<plate> plates;
-	double num, weight;
+	vector<Plate> plates;
+	double weight, totalWeight;
+	int quantity;
+	string line;
 
-	cout << "Please enter the plate weights you have: ";
+	cout << "Enter Plates" << endl;
 
-	while (cin >> num && num != 0)
+	getline(cin, line);
+	istringstream iss(line);
+	while (iss >> weight >> quantity)
 	{
-		plate *tmp = new plate;
-		tmp->weight = num;
-		plates.push_back(*tmp);
+		plates.push_back(Plate(weight, quantity));
 	}
 
-	quickSort(plates, 0, plates.size() - 1);
+	Plate::sortPlates(plates);
+	for (auto plate : plates)
+	{
+		cout << plate.getWeight() << " : " << plate.getQuantity() << endl;;
+	}
 
-	cout << "Please enter the weight you want to use: ";
-	cin >> weight;
+	cout << "Enter total weight" << endl;
+	cin >> totalWeight;
 
-	countPlates(plates, weight);
+	Plate::countWeight(plates, totalWeight);
+
 	system("pause");
 }

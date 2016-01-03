@@ -18,5 +18,13 @@
     <ClCompile Include="main-app.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Plate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Plate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
